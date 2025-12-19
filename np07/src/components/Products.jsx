@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { getProducts, addToCart } from "../api/home";
+import { useNavigate } from "react-router-dom";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(8);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProducts().then((data) => {
@@ -11,6 +14,14 @@ export default function Products() {
   }, []);
 
   const handleAddToCart = async (productId) => {
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if (!token) {
+      alert("Please login first!");
+      navigate("/login");
+
+      return;
+    }
     const response = await addToCart(productId);
     if (response) {
       alert("Product added to cart!");
@@ -20,10 +31,14 @@ export default function Products() {
   const trimmedName = (name) =>
     name.length > 40 ? name.slice(0, 40) + "..." : name;
 
+  const handleViewMore = () => {
+    setVisibleCount((prev) => prev + 8);
+  };
+
   return (
     <div className="container py-5">
       <div className="row g-4">
-        {products.map((product) => (
+        {products.slice(0, visibleCount).map((product) => (
           <div className="col-lg-3 col-md-4 col-sm-6" key={product.ProductId}>
             <div className="minimal-card">
               <div className="img-wrap">
@@ -51,6 +66,18 @@ export default function Products() {
           </div>
         ))}
       </div>
+      {visibleCount < products.length && (
+        <div className="text-center mt-4">
+          <button
+            className="btn rounded-1 text-uppercase fw-semibold py-2 px-4 "
+            onClick={handleViewMore}
+            style={{border: '1px solid #BD744C', color: '#BD744C' }}
+          >
+            View More
+          </button>
+        </div>
+      )}
+      ;
     </div>
   );
 }

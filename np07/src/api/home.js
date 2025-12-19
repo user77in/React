@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const API_BASE = "http://durgeshk-001-site1.anytempurl.com/api/Home"; 
+import axios from "./axios";
 
 export const getProducts = async () => {
   try {
-    const res = await axios.get(`${API_BASE}/getProduct`);
+    const res = await axios.get("/Home/getProduct");
     return res.data;
   } catch (err) {
     console.error(err);
@@ -14,25 +12,17 @@ export const getProducts = async () => {
 
 export const addToCart = async (productId) => {
   try {
-    const res = await axios.post(`${API_BASE}/addToCart/${productId}`, {}, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const res = await axios.post(`/Home/addToCart/${productId}`);
     return res.data;
   } catch (err) {
-    console.error(err);
+    console.error(err.response?.data || err.message);
     return null;
   }
 };
 
 export const getCartItems = async () => {
   try {
-    const res = await axios.get(`${API_BASE}/getCartItems`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const res = await axios.get("/Home/getCartItems");
     return res.data;
   } catch (err) {
     console.error(err);

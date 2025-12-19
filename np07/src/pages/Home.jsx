@@ -1,6 +1,8 @@
 import HeroSlider from "../components/HeroSlider";
 import Navbar from "../components/Navbar";
 import Products from '../components/Products'
+import Footer from '../components/Footer'
+
 
 export default function Home() {
   return (
@@ -21,6 +23,9 @@ export default function Home() {
         <div className="row">
         </div>
       </div>
+      <footer>
+        <Footer />
+      </footer>
     </>
   );
 }
